@@ -125,8 +125,23 @@ li {
     display: inline-block;
     list-style-type: none;
     background-color: #019AC4;
-    margin: 0 10px 10px 0;
-    padding: 10px;
-    width: 250px;
+	padding: 10px 0;
+	margin: 10px 0 0 0;
 	cursor: pointer;
+}
+
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 992px) {
+	li:nth-child(2n+1) {
+		border-right: 10px solid white;
+	}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	li:not(:nth-child(4n)) {
+		border-right: 10px solid white;
+	}
+
 }

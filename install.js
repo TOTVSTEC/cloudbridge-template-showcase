@@ -19,6 +19,14 @@ task.run = function run(cli, targetPath) {
 	};
 
 	project.set('main', 'src/web/index.html');
+	var bowerOverrides = project.get('bowerOverrides') || {};
+	bowerOverrides.bootstrap = bowerOverrides.bootstrap || {};
+	bowerOverrides.bootstrap.main = [
+		'dist/js/bootstrap.js',
+		'dist/css/bootstrap.css'
+	];
+
+	project.set('bowerOverrides', bowerOverrides);
 	project.save();
 
 	return Q()
@@ -54,5 +62,5 @@ function installBowerDependencies() {
 		target: projectDir
 	});
 
-	return bower.install(['totvs-twebchannel']);
+	return bower.install(['totvs-twebchannel', 'jquery', 'bootstrap']);
 };
