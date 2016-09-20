@@ -1,4 +1,4 @@
-#include "TOTVS.CH"
+#include "cloudbridge.ch"
 
 Class <%= project.name %> From CloudBridgeApp
 	Data StartTime
@@ -6,6 +6,7 @@ Class <%= project.name %> From CloudBridgeApp
 	Method New() Constructor
 	Method OnStart()
 	Method OnLoadFinished(url)
+	Method OnReceivedMessage(content)
 	
 EndClass
 
@@ -21,8 +22,7 @@ Method OnLoadFinished(url) Class <%= project.name %>
 	Local script
 	Local loadTime
 	
-	//Loads the js webchannel interface
-	script := "window.channel = new TOTVS.TWebChannel(" + AllTrim(Str(SELF:WSPort)) + ");"
+	script := "var app = new App(" + AllTrim(Str(SELF:WSPort)) + ");"
 	SELF:ExecuteJavaScript(script)
 	
 
@@ -40,13 +40,22 @@ Method OnLoadFinished(url) Class <%= project.name %>
 	script += "}"
 
 	SELF:ExecuteJavaScript(script)
-	/*
-	script := "window.onerror = function(message, source, lineno, colno, error) {"
-	script += "  $('body').append(message);
-	script += "};"
+Return
 
-	SELF:ExecuteJavaScript(script)
-	*/
+Method OnReceivedMessage(content) Class <%= project.name %>
+	Local RetVal := Array(5)
+
+	ConOut("OnReceivedMessage: " + content)
+
+	RetVal[1] := "Message Received!"
+	RetVal[2] := 1997
+	RetVal[3] := .T.
+	RetVal[4] := CToD("02/16/05")
+	RetVal[5] := Array(2)
+	RetVal[5][1] := "Sub 1"
+	RetVal[5][2] := "Sub 2"
+
+	Return RetVal
 Return
 
 
