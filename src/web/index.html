@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<title><%= project.name %></title>
+
+	<!-- build:css styles/vendor.css -->
+	<!-- bower:css -->
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:css styles/app.css -->
+	<link rel="stylesheet" href="styles/app.css">
+	<!-- endbuild -->
+</head>
+
+<body class="disabled">
+    <!--
+	<div class="splash">
+		<h1 class="splash-title">MyOldApp</h1>
+		<img class="totvs-logo" src="images/totvs.png" />
+		<img class="cloudbridge-logo" src="images/cloudbridge.png" />
+	</div>
+    -->
+
+
+    <h1>
+        <img src="images/logo_totvs.png">
+        <span>Cloud Bridge</span>
+    </h1>
+
+    <h2>Acesso aos perifericos</h2>
+    <ul>
+        <li id='device_cam'>Captura imagem</li>
+        <li id='device_barcode'>Código de barras</li>
+        <li id='device_bt_paired'>Pareados</li>
+        <li id='device_geolocation'>Geo Posição</li>
+        <li id='device_orientation_lock'>Libera Orientação</li>
+        <li id='device_orientation_unlock'>Trava Orientação</li>
+        <li id='device_notify'>Notificação</li>
+        <li id='device_vibrate'>Vibração</li>
+    </ul>
+
+    <h2>Testa os perifericos</h2>
+    <ul>
+        <li id='test_bluetooth'>Testa BlueTooth</li>
+        <li id='test_nfc'>Testa NFC</li>
+        <li id='test_wifi'>Testa WIFI</li>
+        <li id='test_gps'>Testa GPS</li>
+        <li id='test_wifi_conn'>Conectado WIFI</li>
+        <li id='test_3g_conn'>Conectado 3G</li>
+    </ul>
+
+    <h2>Abre as configurações</h2>
+    <ul>
+        <li id='config_bluetooth'>Abre BlueTooth</li>
+        <li id='config_nfc'>Abre NFC</li>
+        <li id='config_wifi'>Abre WIFI</li>
+        <li id='config_gps'>Abre GPS</li>
+    </ul>
+
+    <h2>Acesso ao SQLite</h2>
+    <ul>
+        <li id='db_create'>Cria Tabela</li>
+        <li id='db_delete'>Apaga Tabela</li>
+        <li id='db_query'>Recupera dados</li>
+        <li id='db_tables'>Lista Tabelas</li>
+        <li id='db_rollback'>Processo c/ Rollback</li>
+        <li id='db_commit'>Processo c/ Commit</li>
+    </ul>
+
+    <h2>Miscelânea</h2>
+    <ul>       
+        <li id='misc_advpl'>runAdvpl</li>
+        <li id='misc_message'>Troca de mensagens</li>
+		<li id='misc_ajax'>Testar Ajax</li>
+        <li id='misc_version'>Versão da Lib JS</li>
+    </ul>
+
+	<!-- build:js scripts/vendor.js -->
+	<!-- bower:js -->
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:js scripts/app.js -->
+	<script src="scripts/app.js"></script>
+	<!-- endbuild -->
+</body>
+
+</html>
