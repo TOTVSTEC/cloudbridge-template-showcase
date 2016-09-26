@@ -6,7 +6,9 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<title><%= project.name %></title>
+	<title>
+		<%= project.name %>
+	</title>
 
 	<!-- build:css styles/vendor.css -->
 	<!-- bower:css -->
@@ -19,22 +21,37 @@
 </head>
 
 <body class="disabled">
-    <!--
 	<div class="splash">
-		<h1 class="splash-title">MyOldApp</h1>
+		<h1 class="splash-title">
+			<%= project.name %>
+		</h1>
 		<img class="totvs-logo" src="images/totvs.png" />
 		<img class="cloudbridge-logo" src="images/cloudbridge.png" />
 	</div>
-    -->
 
-
-    <h1>
-        <img src="images/logo_totvs.png">
-        <span>Cloud Bridge</span>
-    </h1>
+	<div id="map" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Map</h4>
+				</div>
+				<div class="modal-body">
+					<iframe src="http://maps.google.com/?output=embed"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<h1>
+		<img src="images/logo_totvs.png">
+		<span>Cloud Bridge</span>
+	</h1>
 
 	<div class="container-fluid">
-    	<h2 class="row">Acesso aos perifericos</h2>
+		<h2 class="row">Acesso aos perifericos</h2>
 		<ul class="row">
 			<li class="col-xs-12 col-sm-6 col-md-3" id='device_cam'>Captura imagem</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='device_barcode'>C&oacute;digo de barras</li>
@@ -44,7 +61,7 @@
 			<li class="col-xs-12 col-sm-6 col-md-3" id='device_orientation_unlock'>Trava Orienta&ccedil;&atilde;o</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='device_notify'>Notifica&ccedil;&atilde;o</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='device_vibrate'>Vibra&ccedil;&atilde;o</li>
-    </ul>
+		</ul>
 
 		<h2 class="row">Testa os perifericos</h2>
 		<ul class="row">
@@ -67,6 +84,7 @@
 		<h2 class="row">Acesso ao SQLite</h2>
 		<ul class="row">
 			<li class="col-xs-12 col-sm-6 col-md-3" id='db_create'>Cria Tabela</li>
+			<li class="col-xs-12 col-sm-6 col-md-3" id='db_insert'>Insere Registros</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='db_delete'>Apaga Tabela</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='db_query'>Recupera dados</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='db_tables'>Lista Tabelas</li>
@@ -75,7 +93,7 @@
 		</ul>
 
 		<h2 class="row">Miscel&acirc;nea</h2>
-		<ul class="row">       
+		<ul class="row">
 			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_advpl'>runAdvpl</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_message'>Troca de mensagens</li>
 			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_ajax'>Testar Ajax</li>
