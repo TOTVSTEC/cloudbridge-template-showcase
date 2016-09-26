@@ -34,13 +34,14 @@ function log(text) {
 	}
 
 	elem.appendChild(p);
+	elem.scrollTop = elem.scrollHeight;
 }
 
 var App = function(wsport) {
 	try {
 		$('.splash').remove();
 		$('body').removeClass('disabled');
-		$("#map").modal({show: false});
+		$("#map").modal({ show: false });
 
 		this.channel = new TOTVS.TWebChannel(wsport);
 
@@ -63,6 +64,7 @@ var App = function(wsport) {
 		this.on('click', 'config_wifi', this.on_config_wifi);
 		this.on('click', 'config_gps', this.on_config_gps);
 		this.on('click', 'db_create', this.on_db_create);
+		this.on('click', 'db_insert', this.on_db_insert);
 		this.on('click', 'db_delete', this.on_db_delete);
 		this.on('click', 'db_query', this.on_db_query);
 		this.on('click', 'db_tables', this.on_db_tables);
@@ -100,7 +102,9 @@ App.prototype.on_device_barcode = function on_device_barcode(event) {
 };
 
 App.prototype.on_device_bt_paired = function on_device_bt_paired(event) {
-	this.channel.pairedDevices(pairedDevicesSuccess);
+	this.channel.pairedDevices(function(value) {
+		log('pairedDevices returned: ' + value);
+	});
 };
 
 App.prototype.on_device_geolocation = function on_device_geolocation(event) {
@@ -113,7 +117,7 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 		}
 
 		// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
-		position = position.replace(/\xB0/g, "");
+		position = position.replace(/\xB0/g, '');
 
 		var map = $("#map");
 
@@ -129,11 +133,15 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 };
 
 App.prototype.on_device_orientation_lock = function on_device_orientation_lock(event) {
-	this.channel.lockOrientation();
+	this.channel.lockOrientation(function(value) {
+		log('lockOrientation returned: ' + value);
+	});
 };
 
 App.prototype.on_device_orientation_unlock = function on_device_orientation_unlock(event) {
-	this.channel.unlockOrientation();
+	this.channel.unlockOrientation(function(value) {
+		log('unlockOrientation returned: ' + value);
+	});
 };
 
 App.prototype.on_device_notify = function on_device_notify(event) {
@@ -191,23 +199,51 @@ App.prototype.on_test_3g_conn = function on_test_3g_conn(event) {
 };
 
 App.prototype.on_config_bluetooth = function on_config_bluetooth(event) {
-	this.channel.openSettings(this.channel.BLUETOOTH_FEATURE);
+	this.channel.openSettings(this.channel.BLUETOOTH_FEATURE, function(value) {
+		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	});
 };
 
 App.prototype.on_config_nfc = function on_config_nfc(event) {
-	this.channel.openSettings(this.channel.NFC_FEATURE);
+	this.channel.openSettings(this.channel.NFC_FEATURE, function(value) {
+		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	});
 };
 
 App.prototype.on_config_wifi = function on_config_wifi(event) {
-	this.channel.openSettings(this.channel.WIFI_FEATURE);
+	this.channel.openSettings(this.channel.WIFI_FEATURE, function(value) {
+		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	});
 };
 
 App.prototype.on_config_gps = function on_config_gps(event) {
-	this.channel.openSettings(this.channel.LOCATION_FEATURE);
+	this.channel.openSettings(this.channel.LOCATION_FEATURE, function(value) {
+		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	});
 };
 
 App.prototype.on_db_create = function on_db_create(event) {
-	this.channel.dbExec("create table newTab (cod INTEGER, name TEXT)", dbCreateTableSuccess, dbError);
+	this.channel.dbExec("create table newTab (cod INTEGER, name TEXT)", function(value) {
+		log('dbExec "create table newTab (cod INTEGER, name TEXT)" returned: ' + value);
+	});
+};
+
+App.prototype.on_db_insert = function on_db_insert(event) {
+	var channel = this.channel,
+		query = "select max(cod) as RESULT from newTab";
+
+	channel.dbExecuteScalar(query, function(result) {
+		log('dbExecuteScalar "' + query + '" returned: ' + JSON.stringify(result));
+
+		var recno = result.data || 0;
+		recno++;
+
+		query = "insert into newTab values (" + recno + ", 'User " + recno + "')";
+
+		channel.dbExec(query, function(result) {
+			log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
+		});
+	});
 };
 
 App.prototype.on_db_delete = function on_db_delete(event) {
@@ -215,11 +251,15 @@ App.prototype.on_db_delete = function on_db_delete(event) {
 };
 
 App.prototype.on_db_query = function on_db_query(event) {
-	this.channel.dbGet("select * from newTab", dbGetSuccess, dbError);
+	this.channel.dbGet("select * from newTab", function(data) {
+		log('dbGet: "select * from newTab" returned ' + data);
+	});
 };
 
 App.prototype.on_db_tables = function on_db_tables(event) {
-	this.channel.dbGet("SELECT name FROM sqlite_master WHERE type=\"table\"", dbGetSuccess, dbError);
+	this.channel.dbGet("SELECT name FROM sqlite_master WHERE type=\"table\"", function(data) {
+		log('dbGet: "SELECT name FROM sqlite_master WHERE type=\"table\"" returned ' + data);
+	});
 };
 
 App.prototype.on_db_rollback = function on_db_rollback(event) {
@@ -238,7 +278,7 @@ App.prototype.on_misc_message = function on_misc_message(event) {
 	this.channel.sendMessage("CLOUDBRIDGE X", function(p1) {
 		var msg = "Return:\n";
 		msg += "type: " + (typeof p1) + "\n";
-		msg += "value: " + p1 + "\n";
+		msg += "value: " + JSON.stringify(p1) + "\n";
 
 		alert(msg);
 	});
@@ -303,11 +343,6 @@ function runAdvplSuccess(retStr) {
 
 function testDeviceSuccess(lRet) {
 	alert(lRet);
-};
-
-function dbGetSuccess(data) {
-	var jsonStr = JSON.stringify(data);
-	alert('dbGetSuccess: ' + jsonStr.replace(/"/g, "'"));
 };
 
 function dbError(error) {
