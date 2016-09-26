@@ -113,7 +113,7 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 		}
 
 		// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
-		position = position.replace(/?/g, "");
+		position = position.replace(/\xB0/g, "");
 
 		var map = $("#map");
 
@@ -139,8 +139,8 @@ App.prototype.on_device_orientation_unlock = function on_device_orientation_unlo
 App.prototype.on_device_notify = function on_device_notify(event) {
 	var options = {
 		id: 1,
-		title: "Titulo da Notifica��o",
-		message: "Corpo da Notifica��o"
+		title: "Titulo da Notificação",
+		message: "Corpo da Notificação"
 	};
 
 	this.channel.createNotification(options, function(value) {
@@ -245,9 +245,9 @@ App.prototype.on_misc_message = function on_misc_message(event) {
 };
 
 App.prototype.on_misc_version = function on_misc_version(event) {
-	console.log("Vers�o da lib TWebChannel: " + TOTVS.TWebChannel.version);
+	console.log("Versão da lib TWebChannel: " + TOTVS.TWebChannel.version);
 
-	alert("Vers�o da lib TWebChannel: " + TOTVS.TWebChannel.version);
+	alert("Versão da lib TWebChannel: " + TOTVS.TWebChannel.version);
 };
 
 App.prototype.on_misc_ajax = function on_misc_ajax(event) {
@@ -288,24 +288,12 @@ function pairedDevicesSuccess(paired) {
 	alert(paired);
 };
 
-function getCurrentPositionSuccess(position) {
-	log('');
-
-	if (!position) {
-
-	}
-
-
-	// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
-	position = position.replace(/?/g, "");
-	window.location.href = "http://maps.google.com/?q=" + position;
-};
-
 function getDate() {
 	var today = new Date();
 	var dd = today.getDate();
-	var mm = today.getMonth() + 1; //January is 0!
+	var mm = today.getMonth() + 1;
 	var yyyy = today.getFullYear();
+
 	return mm + '/' + dd + '/' + yyyy;
 };
 
