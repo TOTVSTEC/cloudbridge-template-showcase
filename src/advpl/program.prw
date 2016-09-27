@@ -22,13 +22,10 @@ Return
 Method OnLoadFinished(url) Class <%= project.name %>
 	Local script
 	Local loadTime
-	
+
 	If (!SELF:Started)
 		SELF:Started:= .T.
 
-		script := "var app = new App(" + AllTrim(Str(SELF:WSPort)) + ");"
-		SELF:ExecuteJavaScript(script)
-	
 		//If the load time is less than 3 seconds, await to hide the splash
 		loadTime:= Max((Seconds() - SELF:StartTime), 0)
 
@@ -36,12 +33,7 @@ Method OnLoadFinished(url) Class <%= project.name %>
 			Sleep((3 - loadTime) * 1000)
 		Endif
 
-		//Remove Splash Screen
-		script := "var splash = document.getElementsByClassName('splash');"
-		script += "if (splash.length > 0) {"
-		script += "  splash[0].parentNode.removeChild(splash[0]);"
-		script += "}"
-	
+		script := "var app = new App(" + AllTrim(Str(SELF:WSPort)) + ");"
 		SELF:ExecuteJavaScript(script)
 	EndIf
 Return
