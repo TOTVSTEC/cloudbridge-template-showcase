@@ -117,7 +117,8 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 		}
 
 		// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
-		position = position.replace(/\xB0/g, '');
+		//position = position.replace(/\xB0/g, '');
+		position = position.replace(/[^\w\d\.\,]/g, '');
 
 		var map = $("#map");
 
