@@ -97,13 +97,13 @@ App.prototype.on_device_cam = function on_device_cam(event) {
 
 App.prototype.on_device_barcode = function on_device_barcode(event) {
 	this.channel.barCodeScanner(function(value) {
-		log('barCodeScanner returned: ' + value);
+		log('barCodeScanner returned: ' + JSON.stringify(value, null, 2));
 	});
 };
 
 App.prototype.on_device_bt_paired = function on_device_bt_paired(event) {
 	this.channel.pairedDevices(function(value) {
-		log('pairedDevices returned: ' + value);
+		log('pairedDevices returned: ' + JSON.stringify(value, null, 2));
 	});
 };
 
@@ -112,8 +112,8 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 		log('getCurrentPosition returned: ' + position);
 
 		if (!position) {
-			position = '23.50623S,46.64419W';
-			//return;
+			//position = '23.50623S,46.64419W';
+			return;
 		}
 
 		// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
@@ -164,61 +164,61 @@ App.prototype.on_device_vibrate = function on_device_vibrate(event) {
 };
 
 App.prototype.on_test_bluetooth = function on_test_bluetooth(event) {
-	this.channel.testDevice(this.channel.BLUETOOTH_FEATURE, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.BLUETOOTH_FEATURE, function(value) {
 		log('testDevice BLUETOOTH_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_test_nfc = function on_test_nfc(event) {
-	this.channel.testDevice(this.channel.NFC_FEATURE, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.NFC_FEATURE, function(value) {
 		log('testDevice NFC_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_test_wifi = function on_test_wifi(event) {
-	this.channel.testDevice(this.channel.WIFI_FEATURE, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.WIFI_FEATURE, function(value) {
 		log('testDevice WIFI_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_test_gps = function on_test_gps(event) {
-	this.channel.testDevice(this.channel.LOCATION_FEATURE, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.LOCATION_FEATURE, function(value) {
 		log('testDevice LOCATION_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_test_wifi_conn = function on_test_wifi_conn(event) {
-	this.channel.testDevice(this.channel.CONNECTED_WIFI, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_WIFI, function(value) {
 		log('testDevice CONNECTED_WIFI returned: ' + value);
 	});
 };
 
 App.prototype.on_test_3g_conn = function on_test_3g_conn(event) {
-	this.channel.testDevice(this.channel.CONNECTED_MOBILE, function(value) {
+	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_MOBILE, function(value) {
 		log('testDevice CONNECTED_MOBILE returned: ' + value);
 	});
 };
 
 App.prototype.on_config_bluetooth = function on_config_bluetooth(event) {
-	this.channel.openSettings(this.channel.BLUETOOTH_FEATURE, function(value) {
+	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE, function(value) {
 		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_config_nfc = function on_config_nfc(event) {
-	this.channel.openSettings(this.channel.NFC_FEATURE, function(value) {
+	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE, function(value) {
 		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_config_wifi = function on_config_wifi(event) {
-	this.channel.openSettings(this.channel.WIFI_FEATURE, function(value) {
+	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE, function(value) {
 		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
 	});
 };
 
 App.prototype.on_config_gps = function on_config_gps(event) {
-	this.channel.openSettings(this.channel.LOCATION_FEATURE, function(value) {
+	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE, function(value) {
 		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
 	});
 };
@@ -276,13 +276,15 @@ App.prototype.on_misc_advpl = function on_misc_advpl(event) {
 };
 
 App.prototype.on_misc_message = function on_misc_message(event) {
-	this.channel.sendMessage("CLOUDBRIDGE X", function(p1) {
-		var msg = "Return:\n";
-		msg += "type: " + (typeof p1) + "\n";
-		msg += "value: " + JSON.stringify(p1) + "\n";
-
-		alert(msg);
-	});
+	this.channel.sendMessage({
+			"message": "print",
+			"value": "Message from CloudBridge App!"
+		})
+		.then(function(value) {
+			log("sendMessage returned:");
+			log("type: " + (typeof value));
+			log("<pre>value: " + JSON.stringify(value, null, 2) + "</pre>");
+		});
 };
 
 App.prototype.on_misc_version = function on_misc_version(event) {

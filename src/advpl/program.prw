@@ -39,21 +39,30 @@ Method OnLoadFinished(url) Class <%= project.name %>
 Return
 
 Method OnReceivedMessage(content) Class <%= project.name %>
-	Local RetVal := Array(5)
+	Local RetVal := JSONObject():New()
 
-	ConOut("OnReceivedMessage: " + content)
-
-	RetVal[1] := "Message Received!"
-	RetVal[2] := 1997
-	RetVal[3] := .T.
-	RetVal[4] := CToD("02/16/05")
-	RetVal[5] := Array(2)
-	RetVal[5][1] := "ProjectName"
-	RetVal[5][2] := "<%= project.name %>"
+	ConOut("OnReceivedMessage Received:")
+	ConOut("  message: " + content:Get("message"))
+	ConOut("  value: " + content:Get("value"))
+	
+	RetVal:Set("stringValue", "Message Received!")
+	RetVal:Set("numberValue", 1997)
+	RetVal:Set("booleanValue", .T.)
+	RetVal:Set("dateValue", CToD("02/16/05"))
+	RetVal:Set("nullValue", NIL)
+	
+	RetVal:Set("arrayValue", JSONArray():New())
+	RetVal:Get("arrayValue"):Append(2016)
+	RetVal:Get("arrayValue"):Append("CloudBridge")
+	RetVal:Get("arrayValue"):Append(NIL)
+	RetVal:Get("arrayValue"):Append(.T.)
+	
+	RetVal:Set("objectValue", JSONObject():New())
+	RetVal:Get("objectValue"):Set("name", "<%= project.name %>")
+	RetVal:Get("objectValue"):Set("id", "<%= project.id %>")
 
 	Return RetVal
 Return
-
 
 User Function <%= project.name %>()
 Return
