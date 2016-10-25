@@ -13,7 +13,7 @@ task.run = function run(cli, targetPath) {
 	shelljs = cli.require('shelljs');
 	utils = cli.utils;
 	BowerAddTask = cli.cb_require('tasks/bower-add');
-	project = cli.cb_require('project/project').load(projectDir),
+	project = cli.cb_require('project/project').load(projectDir);
 	templateData = {
 		project: project.data()
 	};
@@ -31,7 +31,6 @@ task.run = function run(cli, targetPath) {
 
 	return Q()
 		.then(copySources)
-		.then(copyDependencies)
 		.then(installBowerDependencies);
 };
 
@@ -46,15 +45,7 @@ function copySources() {
 	target = path.join(target, 'advpl', templateData.project.name + '.prw');
 
 	shelljs.mv(src, target);
-};
-
-function copyDependencies() {
-	var src = path.join(__dirname, 'build', '*'),
-		target = path.join(projectDir, 'build');
-
-	shelljs.mkdir('-p', target);
-	shelljs.cp('-Rf', src, target);
-};
+}
 
 function installBowerDependencies() {
 	var bower = new BowerAddTask({
@@ -63,4 +54,4 @@ function installBowerDependencies() {
 	});
 
 	return bower.install(['totvs-twebchannel', 'jquery', 'bootstrap']);
-};
+}
