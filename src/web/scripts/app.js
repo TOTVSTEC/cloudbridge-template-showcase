@@ -321,15 +321,15 @@ App.prototype.on_misc_ajax = function on_misc_ajax(event) {
 
 function getPictureSuccess(image) {
 	this.channel.createNotification(1, "getPicture", image);
-};
+}
 
 function barCodeScannerSuccess(barCode) {
 	this.channel.createNotification(1, "barCodeScanner", barCode);
-};
+}
 
 function pairedDevicesSuccess(paired) {
 	alert(paired);
-};
+}
 
 function getDate() {
 	var today = new Date();
@@ -338,22 +338,23 @@ function getDate() {
 	var yyyy = today.getFullYear();
 
 	return mm + '/' + dd + '/' + yyyy;
-};
+}
 
 function runAdvplSuccess(retStr) {
 	alert(retStr);
-};
+}
 
 function testDeviceSuccess(lRet) {
 	alert(lRet);
-};
+}
 
 function dbError(error) {
 	alert("dbError: " + error);
-};
+}
+
 function dbSuccess() {
 	// Dummy
-};
+}
 
 // Cria tabela
 function dbCreateTableSuccess() {
@@ -361,18 +362,20 @@ function dbCreateTableSuccess() {
 	this.channel.dbExec("insert into newTab values (2,'User 2')", dbSuccess, dbError);
 	this.channel.dbExec("insert into newTab values (3,'User 3')", dbSuccess, dbError);
 	alert("dbCreateTableSuccess: Tabela criada com sucesso");
-};
+}
+
 function dbCreateTable() {
 	this.channel.dbExec("create table newTab (cod INTEGER, name TEXT)", dbCreateTableSuccess, dbError);
-};
+}
 
 // Deleta tabela
 function dbDropTableSuccess() {
 	alert("dbDropTable: Ok");
-};
+}
+
 function dbDropTable() {
 	this.channel.dbExec("drop table newTab", dbDropTableSuccess, dbError);
-};
+}
 
 function testCommitProcess() {
 	this.channel.dbBegin(dbSuccess, dbError);
@@ -381,7 +384,7 @@ function testCommitProcess() {
 	this.channel.dbExec("insert into newTab values (6,'User 6')", dbSuccess, dbError);
 	this.channel.dbCommit(dbSuccess, dbError);
 	alert("testCommitProcess: Ok");
-};
+}
 
 function testRollbackProcess() {
 	this.channel.dbBegin(dbSuccess, dbError);
@@ -390,6 +393,4 @@ function testRollbackProcess() {
 	this.channel.dbExec("insert into newTab values (6,'User 6')", dbSuccess, dbError);
 	this.channel.dbRollback(dbSuccess, dbError);
 	alert("testRollbackProcess: Ok");
-};
-
-
+}
