@@ -1,0 +1,35 @@
+.totvs-tabstrip {
+    width: 100%;
+    background-color: white;
+
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+
+    box-shadow: inset 0px 1px 0 0 #e4e7e7;
+}
+
+.totvs-tabstrip .totvs-tab {
+    flex-grow: 1;
+    text-align: center;
+    color: #4a5c60;
+    font-size: 12px;
+    padding: 12px;
+	cursor: pointer;
+}
+
+.totvs-tabstrip .totvs-tab.active {
+    color: #ea9b3e;
+    border-top: solid 2px #ea9b3e;
+}
+
+.totvs-tabstrip .totvs-tab .totvs-tab-icon {
+    font-size: 20px;
+}
+
+.totvs-tabstrip .totvs-tab .totvs-tab-label {
+    margin-top: 4px;
+}

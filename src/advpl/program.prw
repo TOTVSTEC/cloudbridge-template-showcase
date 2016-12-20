@@ -28,12 +28,8 @@ Method OnLoadFinished(url) Class <%= project.name %>
 
 		//If the load time is less than 3 seconds, await to hide the splash
 		loadTime:= Max((Seconds() - SELF:StartTime), 0)
+		script := "log('Load Time: ' + " + AllTrim(Str(loadTime)) + ")"
 
-		if (loadTime < 3)
-			Sleep((3 - loadTime) * 1000)
-		Endif
-
-		script := "var app = new App(" + AllTrim(Str(SELF:WSPort)) + ");"
 		SELF:ExecuteJavaScript(script)
 	EndIf
 Return

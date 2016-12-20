@@ -1,3 +1,11 @@
+document.addEventListener("cloudbridgeready", function(event) {
+	if (window.app === undefined) {
+		window.app = new App(event.channel);
+
+		log("event cloudbridgeready fired!");
+	}
+}, false);
+
 window.onerror = function(message, source, lineno, colno, error) {
 	var msg = "<div style='color: red'>";
 	msg += '<b>Unhandled Error!</b></br>';
@@ -21,29 +29,31 @@ window.onerror = function(message, source, lineno, colno, error) {
 };
 
 function log(text) {
-	var p = document.createElement("p");
-	p.innerHTML = text;
+	var elem = $('#content-log');
+	elem.append('<p>' + text + '<p>');
+	elem[0].scrollTop = elem[0].scrollHeight;
 
-	var elem = document.getElementById('log');
-	if (elem === null) {
-		elem = document.createElement("div");
-		elem.id = 'log';
-		elem.classList.add('log');
 
-		document.body.appendChild(elem);
+	var label = $("#tab-log > .totvs-tab-label");
+	var originalText = label.text().trim();
+	var matches = originalText.match(/\(\d+\)/g);
+
+	if (matches === null) {
+		label.text(originalText + " (1)");
 	}
+	else {
+		var count = Number(matches[0].replace(/[\(\)]/g, ''));
 
-	elem.appendChild(p);
-	elem.scrollTop = elem.scrollHeight;
+		label.text(originalText.replace(matches[0], "(" + (count + 1) + ")"));
+	}
 }
 
-var App = function(wsport) {
+var App = function(channel) {
 	try {
 		$('.splash').remove();
-		$('body').removeClass('disabled');
 		$("#map").modal({ show: false });
 
-		this.channel = new TOTVS.TWebChannel(wsport);
+		this.channel = channel;
 
 		this.on('click', 'device_cam', this.on_device_cam);
 		this.on('click', 'device_barcode', this.on_device_barcode);
@@ -75,6 +85,18 @@ var App = function(wsport) {
 		this.on('click', 'misc_version', this.on_misc_version);
 		this.on('click', 'misc_ajax', this.on_misc_ajax);
 
+		$('.totvs-tabstrip').on('click', '.totvs-tab', function(event) {
+			var tab = $(this);
+
+			tab.addClass('active')
+				.siblings('.totvs-tab').removeClass('active');
+
+			var content = $('#' + tab.attr('id').replace('tab-', 'content-'));
+
+			content.show()
+				.siblings().hide();
+
+		});
 
 		log("Started");
 	}
@@ -90,25 +112,26 @@ App.prototype.on = function on(event, name, listener) {
 };
 
 App.prototype.on_device_cam = function on_device_cam(event) {
-	this.channel.getPicture(function(value) {
-		log('getPicture returned: ' + value);
+	this.channel.getPicture().then(function(result) {
+		log('getPicture returned: ' + JSON.stringify(result));
+		log('<img src="file:///' + result + '" width="100%" />');
 	});
 };
 
 App.prototype.on_device_barcode = function on_device_barcode(event) {
-	this.channel.barCodeScanner(function(value) {
-		log('barCodeScanner returned: ' + JSON.stringify(value, null, 2));
+	this.channel.barCodeScanner().then(function(result) {
+		log('barCodeScanner returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_bt_paired = function on_device_bt_paired(event) {
-	this.channel.pairedDevices(function(value) {
-		log('pairedDevices returned: ' + JSON.stringify(value, null, 2));
+	this.channel.pairedDevices().then(function(result) {
+		log('pairedDevices returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_geolocation = function on_device_geolocation(event) {
-	this.channel.getCurrentPosition(function(position) {
+	this.channel.getCurrentPosition().then(function(position) {
 		log('getCurrentPosition returned: ' + position);
 
 		if (!position) {
@@ -134,14 +157,14 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 };
 
 App.prototype.on_device_orientation_lock = function on_device_orientation_lock(event) {
-	this.channel.lockOrientation(function(value) {
-		log('lockOrientation returned: ' + value);
+	this.channel.lockOrientation().then(function(result) {
+		log('lockOrientation returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_orientation_unlock = function on_device_orientation_unlock(event) {
-	this.channel.unlockOrientation(function(value) {
-		log('unlockOrientation returned: ' + value);
+	this.channel.unlockOrientation().then(function(result) {
+		log('unlockOrientation returned: ' + JSON.stringify(result));
 	});
 };
 
@@ -152,80 +175,82 @@ App.prototype.on_device_notify = function on_device_notify(event) {
 		message: "Corpo da Notificação"
 	};
 
-	this.channel.createNotification(options, function(value) {
-		log('createNotification returned: ' + value);
+	this.channel.createNotification(options).then(function(result) {
+		log('createNotification returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_vibrate = function on_device_vibrate(event) {
-	this.channel.vibrate(1000, function(value) {
-		log('vibrate returned: ' + value);
+	this.channel.vibrate(1000).then(function(result) {
+		log('vibrate returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_bluetooth = function on_test_bluetooth(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.BLUETOOTH_FEATURE, function(value) {
-		log('testDevice BLUETOOTH_FEATURE returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.BLUETOOTH_FEATURE).then(function(result) {
+		log('testDevice BLUETOOTH_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_nfc = function on_test_nfc(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.NFC_FEATURE, function(value) {
-		log('testDevice NFC_FEATURE returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.NFC_FEATURE).then(function(result) {
+		log('testDevice NFC_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_wifi = function on_test_wifi(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.WIFI_FEATURE, function(value) {
-		log('testDevice WIFI_FEATURE returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.WIFI_FEATURE).then(function(result) {
+		log('testDevice WIFI_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_gps = function on_test_gps(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.LOCATION_FEATURE, function(value) {
-		log('testDevice LOCATION_FEATURE returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.LOCATION_FEATURE).then(function(result) {
+		log('testDevice LOCATION_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_wifi_conn = function on_test_wifi_conn(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_WIFI, function(value) {
-		log('testDevice CONNECTED_WIFI returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_WIFI).then(function(result) {
+		log('testDevice CONNECTED_WIFI returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_3g_conn = function on_test_3g_conn(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_MOBILE, function(value) {
-		log('testDevice CONNECTED_MOBILE returned: ' + value);
+	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_MOBILE).then(function(result) {
+		log('testDevice CONNECTED_MOBILE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_config_bluetooth = function on_config_bluetooth(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE, function(value) {
-		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE).then(function(result) {
+		log('openSettings BLUETOOTH_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_config_nfc = function on_config_nfc(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE, function(value) {
-		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE).then(function(result) {
+		log('openSettings NFC_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_config_wifi = function on_config_wifi(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE, function(value) {
-		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE).then(function(result) {
+		log('openSettings WIFI_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_config_gps = function on_config_gps(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE, function(value) {
-		log('openSettings BLUETOOTH_FEATURE returned: ' + value);
+	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE).then(function(result) {
+		log('openSettings LOCATION_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_db_create = function on_db_create(event) {
-	this.channel.dbExec("create table newTab (cod INTEGER, name TEXT)", function(value) {
-		log('dbExec "create table newTab (cod INTEGER, name TEXT)" returned: ' + value);
+	var query = "create table newTab (cod INTEGER, name TEXT)";
+
+	this.channel.dbExec(query).then(function(result) {
+		log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
 	});
 };
 
@@ -233,46 +258,120 @@ App.prototype.on_db_insert = function on_db_insert(event) {
 	var channel = this.channel,
 		query = "select max(cod) as RESULT from newTab";
 
-	channel.dbExecuteScalar(query, function(result) {
+	channel.dbExecuteScalar(query).then(function(result) {
 		log('dbExecuteScalar "' + query + '" returned: ' + JSON.stringify(result));
 
 		var recno = result.data || 0;
 		recno++;
 
-		query = "insert into newTab values (" + recno + ", 'User " + recno + "')";
+		query = "insert into newTab values (" + recno + ", 'User é: " + recno + "')";
 
-		channel.dbExec(query, function(result) {
+		channel.dbExec(query).then(function(result) {
 			log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
 		});
 	});
 };
 
 App.prototype.on_db_delete = function on_db_delete(event) {
-	throw new Error('dbDropTable');
+	var query = "drop table newTab";
+
+	this.channel.dbExec(query).then(function(result) {
+		log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
+	});
 };
 
 App.prototype.on_db_query = function on_db_query(event) {
-	this.channel.dbGet("select * from newTab", function(data) {
-		log('dbGet: "select * from newTab" returned ' + data);
+	var query = "select * from newTab";
+
+	this.channel.dbGet(query).then(function(result) {
+		log('dbGet: "' + query + '" returned ' + JSON.stringify(result));
+
+		var rows = result.data,
+			tbl = '';
+
+		tbl += '<table class="table table-striped">';
+		tbl += '<thead>';
+		tbl += '<tr>';
+		tbl += '<th>ID</th>';
+		tbl += '<th>Name</th>';
+		tbl += '</tr>';
+		tbl += '</thead>';
+		tbl += '<tbody>';
+
+		for (var i = 0; i < rows.length; i++) {
+			tbl += '<tr>';
+			tbl += '<td>' + rows[i].COD + '</td>';
+			tbl += '<td>' + rows[i].NAME + '</td>';
+			tbl += '</tr>';
+		}
+
+		tbl += '</tbody>';
+		tbl += '</table>';
+
+		log(tbl);
 	});
 };
 
 App.prototype.on_db_tables = function on_db_tables(event) {
-	this.channel.dbGet("SELECT name FROM sqlite_master WHERE type=\"table\"", function(data) {
-		log('dbGet: "SELECT name FROM sqlite_master WHERE type=\"table\"" returned ' + data);
+	var query = 'SELECT name FROM sqlite_master WHERE type="table"';
+
+	this.channel.dbGet(query).then(function(result) {
+		log('dbGet: "' + query + '" returned ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_db_rollback = function on_db_rollback(event) {
-	//testRollbackProcess
+	var channel = this.channel;
+
+	log("dbBegin");
+
+	channel.dbBegin().then(function(result) {
+		channel.dbExec("insert into newTab values (4,'User 4')");
+		channel.dbExec("insert into newTab values (5,'User 5')");
+		channel.dbExec("insert into newTab values (6,'User 6')");
+
+		throw new Error('Rollback the transaction');
+	})
+	.then(function(result) {
+		log("dbCommit");
+
+		channel.dbCommit();
+	})
+	.catch(function(error) {
+		log("dbRollback: " + error);
+
+		channel.dbRollback();
+	});
+
 };
 
 App.prototype.on_db_commit = function on_db_commit(event) {
-	//testCommitProcess
+	var channel = this.channel;
+
+	log("dbBegin");
+
+	channel.dbBegin().then(function(result) {
+		channel.dbExec("insert into newTab values (4,'User 4')");
+		channel.dbExec("insert into newTab values (5,'User 5')");
+		channel.dbExec("insert into newTab values (6,'User 6')");
+	})
+	.then(function(result) {
+		channel.dbCommit();
+	})
+	.catch(function(error) {
+		log("dbRollback: " + error);
+
+		channel.dbRollback();
+	});
+
 };
 
 App.prototype.on_misc_advpl = function on_misc_advpl(event) {
-	this.channel.runAdvpl("DtoS(CtoD(\"" + getDate() + "\"))", runAdvplSuccess);
+	var command = 'AllTrim(Upper("   teste advpl 123     "))';
+
+	this.channel.runAdvpl(command).then(function(result) {
+		log('runAdvpl: "' + command + '" returned: ' + JSON.stringify(result));
+	});
 };
 
 App.prototype.on_misc_message = function on_misc_message(event) {
@@ -280,23 +379,23 @@ App.prototype.on_misc_message = function on_misc_message(event) {
 			"message": "print",
 			"value": "Message from CloudBridge App!"
 		})
-		.then(function(value) {
+		.then(function(result) {
 			log("sendMessage returned:");
-			log("type: " + (typeof value));
-			log("<pre>value: " + JSON.stringify(value, null, 2) + "</pre>");
+			log("type: " + (typeof result));
+			log("<pre>value: " + JSON.stringify(result, null, 2) + "</pre>");
 		});
 };
 
 App.prototype.on_misc_version = function on_misc_version(event) {
-	console.log("Versão da lib TWebChannel: " + TOTVS.TWebChannel.version);
+	log("Versão da lib TWebChannel: " + TOTVS.TWebChannel.version);
 
 	alert("Versão da lib TWebChannel: " + TOTVS.TWebChannel.version);
 };
 
 App.prototype.on_misc_ajax = function on_misc_ajax(event) {
 	try {
-		$.get("cloudbridge.json", function(data) {
-			$("body").append(data);
+		$.get("cloudbridge.json", function(result) {
+			log("<pre>" + result + "</pre>");
 
 			alert("success");
 		})
@@ -316,81 +415,3 @@ App.prototype.on_misc_ajax = function on_misc_ajax(event) {
 		log(ex);
 	}
 };
-
-
-
-function getPictureSuccess(image) {
-	this.channel.createNotification(1, "getPicture", image);
-}
-
-function barCodeScannerSuccess(barCode) {
-	this.channel.createNotification(1, "barCodeScanner", barCode);
-}
-
-function pairedDevicesSuccess(paired) {
-	alert(paired);
-}
-
-function getDate() {
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth() + 1;
-	var yyyy = today.getFullYear();
-
-	return mm + '/' + dd + '/' + yyyy;
-}
-
-function runAdvplSuccess(retStr) {
-	alert(retStr);
-}
-
-function testDeviceSuccess(lRet) {
-	alert(lRet);
-}
-
-function dbError(error) {
-	alert("dbError: " + error);
-}
-
-function dbSuccess() {
-	// Dummy
-}
-
-// Cria tabela
-function dbCreateTableSuccess() {
-	this.channel.dbExec("insert into newTab values (1,'User 1')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (2,'User 2')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (3,'User 3')", dbSuccess, dbError);
-	alert("dbCreateTableSuccess: Tabela criada com sucesso");
-}
-
-function dbCreateTable() {
-	this.channel.dbExec("create table newTab (cod INTEGER, name TEXT)", dbCreateTableSuccess, dbError);
-}
-
-// Deleta tabela
-function dbDropTableSuccess() {
-	alert("dbDropTable: Ok");
-}
-
-function dbDropTable() {
-	this.channel.dbExec("drop table newTab", dbDropTableSuccess, dbError);
-}
-
-function testCommitProcess() {
-	this.channel.dbBegin(dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (4,'User 4')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (5,'User 5')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (6,'User 6')", dbSuccess, dbError);
-	this.channel.dbCommit(dbSuccess, dbError);
-	alert("testCommitProcess: Ok");
-}
-
-function testRollbackProcess() {
-	this.channel.dbBegin(dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (4,'User 4')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (5,'User 5')", dbSuccess, dbError);
-	this.channel.dbExec("insert into newTab values (6,'User 6')", dbSuccess, dbError);
-	this.channel.dbRollback(dbSuccess, dbError);
-	alert("testRollbackProcess: Ok");
-}

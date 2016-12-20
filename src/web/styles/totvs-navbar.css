@@ -1,0 +1,71 @@
+.navbar-totvs {
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    color: white;
+
+    background: #1979A1; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#1979A1, #086A92); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#1979A1, #086A92); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#1979A1, #086A92); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#1979A1, #086A92); /* Standard syntax */
+
+    box-shadow: 0px 2px 4px 0 rgba(74, 92, 96, 0.3);
+}
+
+.navbar-totvs .navbar-logo {
+    color: white;
+    border-right: solid 1px #146591;
+    box-shadow: 1px 0 0 0 rgba(255, 255, 255, 0.16);
+    padding-top:13px;
+
+    background: #17709A; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#17709A, #0B648C); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#17709A, #0B648C); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#17709A, #0B648C); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#17709A, #0B648C); /* Standard syntax */
+}
+
+.bottom-lined {
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.16);
+}
+
+.navbar-totvs .navbar-nav {
+    margin: 0px;
+}
+
+.navbar-totvs .navbar-brand {
+    color: white;
+
+}
+
+.navbar-totvs > .container-fluid .navbar-brand {
+    margin-left: -15px;
+    margin-left: 0;
+}
+
+.navbar-totvs .navbar-toggle .icon-bar {
+    background-color: white;
+}
+
+.navbar-totvs .navbar-collapse {
+    padding: 0px;
+}
+
+.navbar-totvs .nav > li > a {
+    color: white;
+}
+
+.navbar-totvs .navbar-nav .dropdown .menu-link {
+    font-family: Arial;
+    font-size: 16px;
+    font-weight:normal;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+.button-nav-action {
+    padding: 5px 10px !important;
+}

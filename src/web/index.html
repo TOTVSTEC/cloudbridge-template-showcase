@@ -17,10 +17,14 @@
 
 	<!-- build:css styles/app.css -->
 	<link rel="stylesheet" href="styles/app.css">
+	<link rel="stylesheet" href="styles/totvs.css">
+	<link rel="stylesheet" href="styles/totvs-navbar.css">
+	<link rel="stylesheet" href="styles/totvs-btn.css">
+	<link rel="stylesheet" href="styles/totvs-tabstrip.css">
 	<!-- endbuild -->
 </head>
 
-<body class="disabled">
+<body class="totvs">
 	<div class="splash">
 		<h1 class="splash-title">
 			<%= project.name %>
@@ -44,62 +48,94 @@
 			</div>
 		</div>
 	</div>
-	
-	<h1>
-		<img src="images/logo_totvs.png">
-		<span>Cloud Bridge</span>
-	</h1>
 
-	<div class="container-fluid">
-		<h2 class="row">Acesso aos perifericos</h2>
-		<ul class="row">
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_cam'>Captura imagem</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_barcode'>C&oacute;digo de barras</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_bt_paired'>Pareados</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_geolocation'>Geo Posi&ccedil;&atilde;o</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_orientation_lock'>Libera Orienta&ccedil;&atilde;o</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_orientation_unlock'>Trava Orienta&ccedil;&atilde;o</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_notify'>Notifica&ccedil;&atilde;o</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='device_vibrate'>Vibra&ccedil;&atilde;o</li>
-		</ul>
+	<nav class="navbar navbar-fixed-top navbar-totvs">
+		<div class="container-fluid navbar-header-bg">
+			<div class="navbar-header">
+				<div>
+					<a class="navbar-brand navbar-logo" href="#">
+						<img alt="Brand" src="images/icon-home.png" width="24px">
+					</a>
+					<a class="navbar-brand">
+						<%= project.name %>
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
 
-		<h2 class="row">Testa os perifericos</h2>
-		<ul class="row">
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_bluetooth'>Testa BlueTooth</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_nfc'>Testa NFC</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_wifi'>Testa WIFI</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_gps'>Testa GPS</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_wifi_conn'>Conectado WIFI</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='test_3g_conn'>Conectado 3G</li>
-		</ul>
+	<div class="app-body">
+		<div id='content-commands' class="container-fluid">
+			<h2 class="title">Acesso aos perifericos</h2>
+			<div class="row" style="padding: 10px;">
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_cam'>Captura imagem</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_barcode'>C&oacute;digo de barras</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_bt_paired'>Pareados</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_geolocation'>Geo Posi&ccedil;&atilde;o</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_orientation_lock'>Libera Orienta&ccedil;&atilde;o</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_orientation_unlock'>Trava Orienta&ccedil;&atilde;o</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_notify'>Notifica&ccedil;&atilde;o</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='device_vibrate'>Vibra&ccedil;&atilde;o</button>
+			</div>
 
-		<h2 class="row">Abre as configura&ccedil;&otilde;es</h2>
-		<ul class="row">
-			<li class="col-xs-12 col-sm-6 col-md-3" id='config_bluetooth'>Abre BlueTooth</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='config_nfc'>Abre NFC</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='config_wifi'>Abre WIFI</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='config_gps'>Abre GPS</li>
-		</ul>
 
-		<h2 class="row">Acesso ao SQLite</h2>
-		<ul class="row">
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_create'>Cria Tabela</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_insert'>Insere Registros</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_delete'>Apaga Tabela</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_query'>Recupera dados</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_tables'>Lista Tabelas</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_rollback'>Processo c/ Rollback</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='db_commit'>Processo c/ Commit</li>
-		</ul>
+			<h2 class="title">Testa os perifericos</h2>
+			<div class="row" style="padding: 10px;">
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_bluetooth'>Testa BlueTooth</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_nfc'>Testa NFC</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_wifi'>Testa WIFI</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_gps'>Testa GPS</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_wifi_conn'>Conectado WIFI</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='test_3g_conn'>Conectado 3G</button>
+			</div>
 
-		<h2 class="row">Miscel&acirc;nea</h2>
-		<ul class="row">
-			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_advpl'>runAdvpl</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_message'>Troca de mensagens</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_ajax'>Testar Ajax</li>
-			<li class="col-xs-12 col-sm-6 col-md-3" id='misc_version'>Vers&atilde;o da Lib JS</li>
-		</ul>
+			<h2 class="title">Abre as configura&ccedil;&otilde;es</h2>
+			<div class="row" style="padding: 10px;">
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='config_bluetooth'>Abre BlueTooth</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='config_nfc'>Abre NFC</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='config_wifi'>Abre WIFI</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='config_gps'>Abre GPS</button>
+			</div>
+
+			<h2 class="title">Acesso ao SQLite</h2>
+			<div class="row" style="padding: 10px;">
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_create'>Cria Tabela</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_insert'>Insere Registros</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_delete'>Apaga Tabela</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_query'>Recupera dados</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_tables'>Lista Tabelas</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_rollback'>Processo c/ Rollback</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='db_commit'>Processo c/ Commit</button>
+			</div>
+
+			<h2 class="title">Miscel&acirc;nea</h2>
+			<div class="row" style="padding: 10px;">
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='misc_advpl'>runAdvpl</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='misc_message'>Troca de mensagens</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='misc_ajax'>Testar Ajax</button>
+				<button type="button" class="totvs-btn totvs-btn-primary col-xs-12 col-sm-6 col-md-3" id='misc_version'>Vers&atilde;o da Lib JS</button>
+			</div>
+		</div>
+		<div id='content-log' class="container-fluid" style="display: none;">
+		</div>
 	</div>
+
+	<div class="totvs-tabstrip">
+		<div id="tab-commands" class="totvs-tab active">
+			<div class="totvs-tab-icon">
+				<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+			</div>
+			<div class="totvs-tab-label">Comandos</div>
+		</div>
+		<div id="tab-log" class="totvs-tab">
+			<div class="totvs-tab-icon">
+				<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+				<br>
+			</div>
+			<div class="totvs-tab-label">Log</div>
+		</div>
+	</div>
+
 
 	<!-- build:js scripts/vendor.js -->
 	<!-- bower:js -->

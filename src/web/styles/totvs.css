@@ -1,0 +1,37 @@
+.totvs {
+    background-color: #FFFFFF;
+    font-family: Arial;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.totvs .totvs-container {
+    padding: 50px 0px 10px 0px;
+    width: 100%;
+}
+
+.totvs .totvs-content {
+    padding: 0px;
+    width: 100%;
+    position: initial!important;
+}
+
+.totvs .totvs-content-padding {
+    padding: 10px;
+}
+
+.totvs .big-text {
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.totvs .small-text {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.totvs .smallest-text {
+    font-size: 12px;
+    line-height: 17px;
+}
+
