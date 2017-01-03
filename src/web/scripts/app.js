@@ -132,17 +132,17 @@ App.prototype.on_device_bt_paired = function on_device_bt_paired(event) {
 
 App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 	this.channel.getCurrentPosition().then(function(position) {
-		log('getCurrentPosition returned: ' + position);
+		log('getCurrentPosition returned: ' + JSON.stringify(position));
 
-		if (!position.length) {
+		if (position.latitude === undefined) {
 			return;
 		}
 
 		var map = $("#map");
 
-		map.find('.modal-title').html(position);
+		map.find('.modal-title').html(position.latitude + ", " + position.longitude);
 		map.find('iframe')
-			.attr('src', 'http://maps.google.com/?q=' + position + '&output=embed')
+			.attr('src', 'http://maps.google.com/?q=' + position.latitude + "," + position.longitude + '&output=embed')
 			.css({
 				'height': (window.innerHeight - 120) + 'px'
 				//'width': (window.innerWidth - 40) + 'px'
