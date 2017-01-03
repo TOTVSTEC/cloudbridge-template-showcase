@@ -134,14 +134,9 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 	this.channel.getCurrentPosition().then(function(position) {
 		log('getCurrentPosition returned: ' + position);
 
-		if (!position) {
-			//position = '23.50623S,46.64419W';
+		if (!position.length) {
 			return;
 		}
-
-		// Necessario retirar o sinal de Grau para que o MAPS reconheca a posicao
-		//position = position.replace(/\xB0/g, '');
-		position = position.replace(/[^\w\d\.\,]/g, '');
 
 		var map = $("#map");
 
