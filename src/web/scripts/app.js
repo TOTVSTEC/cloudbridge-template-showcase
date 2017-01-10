@@ -84,6 +84,7 @@ var App = function(channel) {
 		this.on('click', 'misc_message', this.on_misc_message);
 		this.on('click', 'misc_version', this.on_misc_version);
 		this.on('click', 'misc_ajax', this.on_misc_ajax);
+		this.on('click', 'misc_temp', this.on_misc_temp);
 
 		$('.totvs-tabstrip').on('click', '.totvs-tab', function(event) {
 			var tab = $(this);
@@ -152,15 +153,11 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 };
 
 App.prototype.on_device_orientation_lock = function on_device_orientation_lock(event) {
-	this.channel.lockOrientation().then(function(result) {
-		log('lockOrientation returned: ' + JSON.stringify(result));
-	});
+	this.channel.lockOrientation();
 };
 
 App.prototype.on_device_orientation_unlock = function on_device_orientation_unlock(event) {
-	this.channel.unlockOrientation().then(function(result) {
-		log('unlockOrientation returned: ' + JSON.stringify(result));
-	});
+	this.channel.unlockOrientation();
 };
 
 App.prototype.on_device_notify = function on_device_notify(event) {
@@ -170,15 +167,11 @@ App.prototype.on_device_notify = function on_device_notify(event) {
 		message: "Corpo da Notificação"
 	};
 
-	this.channel.createNotification(options).then(function(result) {
-		log('createNotification returned: ' + JSON.stringify(result));
-	});
+	this.channel.createNotification(options);
 };
 
 App.prototype.on_device_vibrate = function on_device_vibrate(event) {
-	this.channel.vibrate(1000).then(function(result) {
-		log('vibrate returned: ' + JSON.stringify(result));
-	});
+	this.channel.vibrate(1000);
 };
 
 App.prototype.on_test_bluetooth = function on_test_bluetooth(event) {
@@ -218,27 +211,19 @@ App.prototype.on_test_3g_conn = function on_test_3g_conn(event) {
 };
 
 App.prototype.on_config_bluetooth = function on_config_bluetooth(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE).then(function(result) {
-		log('openSettings BLUETOOTH_FEATURE returned: ' + JSON.stringify(result));
-	});
+	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE);
 };
 
 App.prototype.on_config_nfc = function on_config_nfc(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE).then(function(result) {
-		log('openSettings NFC_FEATURE returned: ' + JSON.stringify(result));
-	});
+	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE);
 };
 
 App.prototype.on_config_wifi = function on_config_wifi(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE).then(function(result) {
-		log('openSettings WIFI_FEATURE returned: ' + JSON.stringify(result));
-	});
+	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE);
 };
 
 App.prototype.on_config_gps = function on_config_gps(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE).then(function(result) {
-		log('openSettings LOCATION_FEATURE returned: ' + JSON.stringify(result));
-	});
+	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE);
 };
 
 App.prototype.on_db_create = function on_db_create(event) {
@@ -409,4 +394,10 @@ App.prototype.on_misc_ajax = function on_misc_ajax(event) {
 		log("Error");
 		log(ex);
 	}
+};
+
+App.prototype.on_misc_temp = function on_misc_temp(event) {
+	this.channel.getTempPath().then(function(result) {
+		log('Temporary Path: ' + JSON.stringify(result));
+	});
 };
