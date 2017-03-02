@@ -1,6 +1,6 @@
 {
   "name": "cloudbridge-template-showcase",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "0.0.1",
   "description": "Showcase template for cloudbridge apps",
   "main": "install.js",
   "license": "MIT",
