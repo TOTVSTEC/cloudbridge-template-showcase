@@ -1,6 +1,6 @@
 document.addEventListener("cloudbridgeready", function(event) {
 	if (window.app === undefined) {
-		window.app = new App(event.channel);
+		window.app = new App();
 
 		log("event cloudbridgeready fired!");
 	}
@@ -48,12 +48,10 @@ function log(text) {
 	}
 }
 
-var App = function(channel) {
+var App = function() {
 	try {
 		$('.splash').remove();
 		$("#map").modal({ show: false });
-
-		this.channel = channel;
 
 		this.on('click', 'device_cam', this.on_device_cam);
 		this.on('click', 'device_barcode', this.on_device_barcode);
@@ -113,26 +111,26 @@ App.prototype.on = function on(event, name, listener) {
 };
 
 App.prototype.on_device_cam = function on_device_cam(event) {
-	this.channel.getPicture().then(function(result) {
+	cloudbridge.getPicture().then(function(result) {
 		log('getPicture returned: ' + JSON.stringify(result));
 		log('<img src="file:///' + result + '" width="100%" />');
 	});
 };
 
 App.prototype.on_device_barcode = function on_device_barcode(event) {
-	this.channel.barCodeScanner().then(function(result) {
+	cloudbridge.barCodeScanner().then(function(result) {
 		log('barCodeScanner returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_bt_paired = function on_device_bt_paired(event) {
-	this.channel.pairedDevices().then(function(result) {
+	cloudbridge.pairedDevices().then(function(result) {
 		log('pairedDevices returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_device_geolocation = function on_device_geolocation(event) {
-	this.channel.getCurrentPosition().then(function(position) {
+	cloudbridge.getCurrentPosition().then(function(position) {
 		log('getCurrentPosition returned: ' + JSON.stringify(position));
 
 		if (position.latitude === undefined) {
@@ -153,11 +151,11 @@ App.prototype.on_device_geolocation = function on_device_geolocation(event) {
 };
 
 App.prototype.on_device_orientation_lock = function on_device_orientation_lock(event) {
-	this.channel.lockOrientation();
+	cloudbridge.lockOrientation();
 };
 
 App.prototype.on_device_orientation_unlock = function on_device_orientation_unlock(event) {
-	this.channel.unlockOrientation();
+	cloudbridge.unlockOrientation();
 };
 
 App.prototype.on_device_notify = function on_device_notify(event) {
@@ -167,78 +165,77 @@ App.prototype.on_device_notify = function on_device_notify(event) {
 		message: "Corpo da Notificação"
 	};
 
-	this.channel.createNotification(options);
+	cloudbridge.createNotification(options);
 };
 
 App.prototype.on_device_vibrate = function on_device_vibrate(event) {
-	this.channel.vibrate(1000);
+	cloudbridge.vibrate(1000);
 };
 
 App.prototype.on_test_bluetooth = function on_test_bluetooth(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.BLUETOOTH_FEATURE).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.BLUETOOTH_FEATURE).then(function(result) {
 		log('testDevice BLUETOOTH_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_nfc = function on_test_nfc(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.NFC_FEATURE).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.NFC_FEATURE).then(function(result) {
 		log('testDevice NFC_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_wifi = function on_test_wifi(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.WIFI_FEATURE).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.WIFI_FEATURE).then(function(result) {
 		log('testDevice WIFI_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_gps = function on_test_gps(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.LOCATION_FEATURE).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.LOCATION_FEATURE).then(function(result) {
 		log('testDevice LOCATION_FEATURE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_wifi_conn = function on_test_wifi_conn(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_WIFI).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.CONNECTED_WIFI).then(function(result) {
 		log('testDevice CONNECTED_WIFI returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_test_3g_conn = function on_test_3g_conn(event) {
-	this.channel.testDevice(TOTVS.TWebChannel.CONNECTED_MOBILE).then(function(result) {
+	cloudbridge.testDevice(TOTVS.TWebChannel.CONNECTED_MOBILE).then(function(result) {
 		log('testDevice CONNECTED_MOBILE returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_config_bluetooth = function on_config_bluetooth(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE);
+	cloudbridge.openSettings(TOTVS.TWebChannel.BLUETOOTH_FEATURE);
 };
 
 App.prototype.on_config_nfc = function on_config_nfc(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.NFC_FEATURE);
+	cloudbridge.openSettings(TOTVS.TWebChannel.NFC_FEATURE);
 };
 
 App.prototype.on_config_wifi = function on_config_wifi(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.WIFI_FEATURE);
+	cloudbridge.openSettings(TOTVS.TWebChannel.WIFI_FEATURE);
 };
 
 App.prototype.on_config_gps = function on_config_gps(event) {
-	this.channel.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE);
+	cloudbridge.openSettings(TOTVS.TWebChannel.LOCATION_FEATURE);
 };
 
 App.prototype.on_db_create = function on_db_create(event) {
 	var query = "create table newTab (cod INTEGER, name TEXT)";
 
-	this.channel.dbExec(query).then(function(result) {
+	cloudbridge.dbExec(query).then(function(result) {
 		log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_db_insert = function on_db_insert(event) {
-	var channel = this.channel,
-		query = "select max(cod) as RESULT from newTab";
+	var query = "select max(cod) as RESULT from newTab";
 
-	channel.dbExecuteScalar(query).then(function(result) {
+	cloudbridge.dbExecuteScalar(query).then(function(result) {
 		log('dbExecuteScalar "' + query + '" returned: ' + JSON.stringify(result));
 
 		var recno = result.data || 0;
@@ -246,7 +243,7 @@ App.prototype.on_db_insert = function on_db_insert(event) {
 
 		query = "insert into newTab values (" + recno + ", 'User é: " + recno + "')";
 
-		channel.dbExec(query).then(function(result) {
+		cloudbridge.dbExec(query).then(function(result) {
 			log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
 		});
 	});
@@ -255,7 +252,7 @@ App.prototype.on_db_insert = function on_db_insert(event) {
 App.prototype.on_db_delete = function on_db_delete(event) {
 	var query = "drop table newTab";
 
-	this.channel.dbExec(query).then(function(result) {
+	cloudbridge.dbExec(query).then(function(result) {
 		log('dbExec "' + query + '" returned: ' + JSON.stringify(result));
 	});
 };
@@ -263,7 +260,7 @@ App.prototype.on_db_delete = function on_db_delete(event) {
 App.prototype.on_db_query = function on_db_query(event) {
 	var query = "select * from newTab";
 
-	this.channel.dbGet(query).then(function(result) {
+	cloudbridge.dbGet(query).then(function(result) {
 		log('dbGet: "' + query + '" returned ' + JSON.stringify(result));
 
 		var rows = result.data,
@@ -295,53 +292,49 @@ App.prototype.on_db_query = function on_db_query(event) {
 App.prototype.on_db_tables = function on_db_tables(event) {
 	var query = 'SELECT name FROM sqlite_master WHERE type="table"';
 
-	this.channel.dbGet(query).then(function(result) {
+	cloudbridge.dbGet(query).then(function(result) {
 		log('dbGet: "' + query + '" returned ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_db_rollback = function on_db_rollback(event) {
-	var channel = this.channel;
-
 	log("dbBegin");
 
-	channel.dbBegin().then(function(result) {
-		channel.dbExec("insert into newTab values (4,'User 4')");
-		channel.dbExec("insert into newTab values (5,'User 5')");
-		channel.dbExec("insert into newTab values (6,'User 6')");
+	cloudbridge.dbBegin().then(function(result) {
+		cloudbridge.dbExec("insert into newTab values (4,'User 4')");
+		cloudbridge.dbExec("insert into newTab values (5,'User 5')");
+		cloudbridge.dbExec("insert into newTab values (6,'User 6')");
 
 		throw new Error('Rollback the transaction');
 	})
 	.then(function(result) {
 		log("dbCommit");
 
-		channel.dbCommit();
+		cloudbridge.dbCommit();
 	})
 	.catch(function(error) {
 		log("dbRollback: " + error);
 
-		channel.dbRollback();
+		cloudbridge.dbRollback();
 	});
 
 };
 
 App.prototype.on_db_commit = function on_db_commit(event) {
-	var channel = this.channel;
-
 	log("dbBegin");
 
-	channel.dbBegin().then(function(result) {
-		channel.dbExec("insert into newTab values (4,'User 4')");
-		channel.dbExec("insert into newTab values (5,'User 5')");
-		channel.dbExec("insert into newTab values (6,'User 6')");
+	cloudbridge.dbBegin().then(function(result) {
+		cloudbridge.dbExec("insert into newTab values (4,'User 4')");
+		cloudbridge.dbExec("insert into newTab values (5,'User 5')");
+		cloudbridge.dbExec("insert into newTab values (6,'User 6')");
 	})
 	.then(function(result) {
-		channel.dbCommit();
+		cloudbridge.dbCommit();
 	})
 	.catch(function(error) {
 		log("dbRollback: " + error);
 
-		channel.dbRollback();
+		cloudbridge.dbRollback();
 	});
 
 };
@@ -349,13 +342,13 @@ App.prototype.on_db_commit = function on_db_commit(event) {
 App.prototype.on_misc_advpl = function on_misc_advpl(event) {
 	var command = 'AllTrim(Upper("   teste advpl 123     "))';
 
-	this.channel.runAdvpl(command).then(function(result) {
+	cloudbridge.runAdvpl(command).then(function(result) {
 		log('runAdvpl: "' + command + '" returned: ' + JSON.stringify(result));
 	});
 };
 
 App.prototype.on_misc_message = function on_misc_message(event) {
-	this.channel.sendMessage({
+	cloudbridge.sendMessage({
 			"message": "print",
 			"value": "Message from CloudBridge App!"
 		})
@@ -397,7 +390,7 @@ App.prototype.on_misc_ajax = function on_misc_ajax(event) {
 };
 
 App.prototype.on_misc_temp = function on_misc_temp(event) {
-	this.channel.getTempPath().then(function(result) {
+	cloudbridge.getTempPath().then(function(result) {
 		log('Temporary Path: ' + JSON.stringify(result));
 	});
 };
