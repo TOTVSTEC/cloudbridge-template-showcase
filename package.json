@@ -1,0 +1,29 @@
+{
+  "name": "cloudbridge-template-showcase",
+  "version": "0.0.1-SNAPSHOT",
+  "description": "Showcase template for cloudbridge apps",
+  "main": "install.js",
+  "license": "MIT",
+  "scripts": {
+    "release": "totvstec release",
+    "release:minor": "totvstec release minor",
+    "release:major": "totvstec release major"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TOTVSTEC/cloudbridge-template-showcase.git"
+  },
+  "contributors": [
+    {
+      "name": "Rogerio Ribeiro da Cruz",
+      "email": "rogerio.ribeiro@totvs.com.br"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/TOTVSTEC/cloudbridge-template-showcase/issues"
+  },
+  "homepage": "https://github.com/TOTVSTEC/cloudbridge-template-showcase#readme",
+  "devDependencies": {
+    "totvstec-tools": "^1.0.5"
+  }
+}
