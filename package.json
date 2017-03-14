@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/TOTVSTEC/cloudbridge-template-showcase#readme",
   "devDependencies": {
-    "totvstec-tools": "^1.0.5"
+    "totvstec-tools": "^1.0.6"
   }
 }
