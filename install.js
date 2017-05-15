@@ -12,11 +12,18 @@ task.run = function run(cli, targetPath) {
 	Q = cli.require('q');
 	shelljs = cli.require('shelljs');
 	utils = cli.utils;
-	BowerAddTask = cli.cb_require('tasks/bower-add');
 	project = cli.cb_require('project/project').load(projectDir);
 	templateData = {
 		project: project.data()
 	};
+
+	if (cli.require_task) {
+		var engine = project.get('engine') || 'default';
+		BowerAddTask = cli.require_task('bower-add', engine);
+	}
+	else {
+		BowerAddTask = cli.cb_require('tasks/bower-add');
+	}
 
 	project.set('main', 'src/web/index.html');
 	var bowerOverrides = project.get('bowerOverrides') || {};
